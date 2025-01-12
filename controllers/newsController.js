@@ -1,12 +1,14 @@
 const axios = require('axios');
-const { getCache, setCache } = require('../utils/cacheService');
+// const { getCache, setCache } = require('../utils/cacheService');
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 3600 });
 
 exports.getNews = async (req, res) => {
     const { category = 'general' } = req.query;
     const cacheKey = `news_${category}`;
 
-    if (getCache(cacheKey)) {
-        return res.status(200).json({ news: getCache(cacheKey) });
+    if (cache.has(cacheKey)) {
+        return res.status(200).json({ news: cache.get(cacheKey) });
     }
 
     try {
@@ -15,7 +17,8 @@ exports.getNews = async (req, res) => {
         );
 
         const articles = response.data.articles;
-        setCache(cacheKey, articles);
+        // setCache(cacheKey, articles);
+        cache.set(cacheKey, articles);
         res.status(200).json({ news: articles });
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch news' });
