@@ -1,5 +1,4 @@
 const axios = require('axios');
-// const { getCache, setCache } = require('../utils/cacheService');
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: 3600 });
 
@@ -17,7 +16,6 @@ exports.getNews = async (req, res) => {
         );
 
         const articles = response.data.articles;
-        // setCache(cacheKey, articles);
         cache.set(cacheKey, articles);
         res.status(200).json({ news: articles });
     } catch (error) {

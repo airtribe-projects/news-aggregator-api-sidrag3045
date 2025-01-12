@@ -1,3 +1,4 @@
+// tried to split the cache service from the controller but it's not working.
 const NodeCache = require('node-cache');
 const cache = new NodeCache({ stdTTL: 3600 });
 
